@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="./static/zepto.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+<form id="upload" action="../wx/upload.save" method="post">
+    姓名：<input type="text" name="name"><br>
+    <!--<input type="button" onclick="fileUpload()" value="上传">-->
+    <input type="submit" value="上传">
+    <input type="reset" value="重置">
+</form><br>
+<form method="post"action="" enctype=”multipart/form-data”>
+    <!--照片：<input id="file" type="file" name="file" multiple>-->
+    <!--<input type="file" multiple id="input" onchange="handleFiles(this.files)">-->
+</form>
+<input type="file" id="fileElem" multiple accept="image/*" style="display:block" onchange="handleFiles(this.files)">
+<a href="#" id="fileSelect">Select some files</a>
+<div id="fileList">
+    <p>No files selected!</p>
+</div>
+
+<div id="preivew"></div>
+<script>
+    //字符串模板
+    function render(template, context) {
+
+        var tokenReg = /(\\)?\{([^\{\}\\]+)(\\)?\}/g;
+
+        return template.replace(tokenReg, function (word, slash1, token, slash2) {
+            if (slash1 || slash2) {
+                return word.replace('\\', '');
+            }
+
+            var variables = token.replace(/\s/g, '').split('.');
+            var currentObject = context;
+            var i, length, variable;
+
+            for (i = 0, length = variables.length; i < length; ++i) {
+                variable = variables[i];
+                currentObject = currentObject[variable];
+                if (currentObject === undefined || currentObject === null) return '';
+            }
+            return currentObject;
+        })
+    };
+    //将函数挂到 String 的原型链
+    String.prototype.render = function (context) {
+        return render(this, context);
+    };
+
+    var fileSelect = document.getElementById("fileSelect"),
+            fileElem = document.getElementById("fileElem");
+    fileSelect.addEventListener("click", function (e) {
+        if (fileElem) {
+            fileElem.click();
+        }
+        e.preventDefault(); // prevent navigation to "#"
+    }, false);
+    fileElem.onchange = function () {
+        for (var i = 0; i < fileElem.length; i++) {
+            new FileUpload(fileElem[i], fileElem[i].file);
+        }
+    }
+
+    function FileUpload(img, file) {
+        var reader = new FileReader();
+        this.ctrl = createThrobber(img);
+        var xhr = new XMLHttpRequest();
+        this.xhr = xhr;
+
+        var self = this;
+        this.xhr.upload.addEventListener("progress", function(e) {
+            if (e.lengthComputable) {
+                var percentage = Math.round((e.loaded * 100) / e.total);
+                self.ctrl.update(percentage);
+            }
+        }, false);
+
+        xhr.upload.addEventListener("load", function(e){
+            self.ctrl.update(100);
+            var canvas = self.ctrl.ctx.canvas;
+            canvas.parentNode.removeChild(canvas);
+        }, false);
+        xhr.open("POST", "http://demos.hacks.mozilla.org/paul/demos/resources/webservices/devnull.php");
+        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        reader.onload = function(evt) {
+            xhr.send(evt.target.result);
+        };
+        reader.readAsBinaryString(file);
+    }
+    /*window.URL = window.URL || window.webkitURL;
+
+    var fileSelect = document.getElementById("fileSelect"),
+            fileElem = document.getElementById("fileElem"),
+            fileList = document.getElementById("fileList");
+
+    fileSelect.addEventListener("click", function (e) {
+        if (fileElem) {
+            fileElem.click();
+        }
+        e.preventDefault(); // prevent navigation to "#"
+    }, false);
+
+    function handleFiles(files) {
+        if (!files.length) {
+            fileList.innerHTML = "<p>No files selected!</p>";
+        } else {
+            fileList.innerHTML = "";
+            var list = document.createElement("ul");
+            fileList.appendChild(list);
+            for (var i = 0; i < files.length; i++) {
+                var li = document.createElement("li");
+                list.appendChild(li);
+
+                var img = document.createElement("img");
+                img.src = window.URL.createObjectURL(files[i]);
+                img.height = 60;
+                img.onload = function() {
+                    window.URL.revokeObjectURL(this.src);
+                }
+                li.appendChild(img);
+                var info = document.createElement("span");
+                info.innerHTML = files[i].name + ": " + files[i].size + " bytes";
+                li.appendChild(info);
+            }
+        }
+    }*/
+    /*//缩略图预览
+    var inputElement = document.getElementById("input");
+    var preivew = document.getElementById("preivew");
+    inputElement.addEventListener("change", handleFiles, false);
+    function handleFiles(files) {
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var imageType = /^image\//;
+
+            if (!imageType.test(file.type)) {
+                continue;
+            }
+
+            var img = document.createElement("img");
+            img.classList.add("obj");
+            img.file = file;
+            preivew.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed.
+
+            var reader = new FileReader();
+            reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+            reader.readAsDataURL(file);
+        }
+    }*/
+
+
+    //第二种方式
+    function uploadFiles(url, files) {
+
+        var formData = new FormData();
+        /*for (var i = 0, file; file = files[i]; ++i)
+        {
+            formData.append(file.name, file);
+            console.info(file.name);
+        }*/
+        formData.append("clientFile", files);
+        var xhr = new XMLHttpRequest();
+        xhr.timeout = 3000;
+        xhr.responseType = "json";
+        xhr.open('POST', url, true);
+        xhr.onload = function(e) {
+            document.getElementById("process").innerHTML = "正在上传...";
+            if(xhr.status === 200)
+            {
+                if(xhr.response.res==1){
+                    document.getElementById("process").innerHTML = "上传成功";
+                }
+            }else{
+                document.getElementById("process").innerHTML = "上传失败<br>报错代码:"+xhr.status;
+            }
+        };
+        xhr.ontimeout = function(e) {console.info("请求超时")};
+        xhr.onerror = function(e) {console.info("发生错误")};
+        //xhr.upload.onprogress = function(e) { ... };
+        xhr.send(formData);  // multipart/form-data
+
+    }
+
+    /*document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+                uploadFiles('../wx/uploadFile.save', this.files[0])},false);*/
+
+</script>
+</body>
+</html>

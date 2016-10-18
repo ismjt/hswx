@@ -1,0 +1,146 @@
+html {
+    height: 100%;
+    margin: 0 auto;
+    font-family: 'Heiti SC', 'Microsoft YaHei';
+    font-size: 20px;
+    overflow: hidden;
+    outline: 0;
+    -webkit-text-size-adjust: none;
+}
+body{
+
+    padding: 0;
+    margin:0 ;
+}
+h1{
+    margin: 0;
+    padding: 0.5rem 0;
+    text-align: center;
+}
+.page{
+    margin:0;
+    padding:0;
+    top:0;
+    height:100%;
+    overflow:auto;
+}
+header{
+    background-color: #04bfbd;
+    color: #fff;
+    font-size: 0.4rem;
+    height: 2rem;
+    width: 100%;
+}
+section{
+    margin:0.5rem 0;
+    padding: 0 1rem;
+}
+.item-name{
+    color: #6b6b6b;
+    font-size: 0.7rem;
+    margin-right: 0.4rem;
+    width: 2rem;
+    vertical-align: baseline;
+}
+.item{
+    width: 9.5rem;
+    height: 5rem;
+}
+.item input{
+    width: 68%;
+    height: 1rem;
+    padding-left: .5rem;
+    font-size:.6rem;
+    border: solid 1px #ccc;
+}
+.item textarea{
+    height: 4rem;
+    padding: 0.2rem;
+    width: 68.5%;
+    resize:none;
+    border: solid 1px #ccc;
+    font-size: .6rem;
+}
+.file{
+    background: #f96 none repeat scroll 0 0;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    font-size: 0.6rem;
+    overflow: hidden;
+    padding: 2px 0;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-indent: 0;
+    vertical-align: bottom;
+    width: 4rem;
+}
+.file:active {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+    -webkit-tap-highlight-color:transparent;
+}
+#uploadfile{
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    width: 10rem;
+}
+select {
+    background: transparent;
+    border: solid 1px #ccc;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    width: 72%;
+    height:1.1rem;
+    font-size:.6rem;
+}
+#submit{
+    position:absolute;
+    margin-top: 1rem;
+    width: 100%;
+}
+#submit input{
+    border: 0;
+    height:1.6rem;
+    width: 14rem;
+    margin: 0 1rem;
+    font-size: .8rem;
+    background-color: #04bfbd;
+    color: #fff;
+    text-align: center;
+    -webkit-border-radius: .2rem;
+    -moz-border-radius: .2rem;
+    border-radius: .2rem;
+}
+#filename{
+    font-weight: 500;
+    color: #1c1d1f;
+    font-size: .6rem;
+    vertical-align: bottom;
+}
+#filesize{
+    float: right;
+    font-size: 0.5rem;
+    margin-right: 5px;
+    width: 2rem;
+}
+progress {
+    background-color: #e6e6e6;
+    border: 0.5px solid #0064b4;
+    border-radius: 2px;
+    color: #04bfbd;
+    display: none;
+    height: 0.4rem;
+    margin-top: 2px;
+    position: fixed;
+    width: 65%;
+}
+progress::-moz-progress-bar { background: #04bfbd; }
+progress::-webkit-progress-bar { background: #04bfbd; }
+progress::-webkit-progress-value  { background: #04bfbd; }

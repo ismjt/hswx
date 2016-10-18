@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订阅信息展示</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="./static/img/fav.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- 我们提供了CDN地址可以直接使用，并且强烈建议使用我们的CDN而不是下载到本地
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+
+    <!-- local-->
+    <link rel="stylesheet" href="./static/sm.min.css">
+
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <a style="color: #fff;" class="icon icon-left pull-left" href="syq.html"></a>
+        <h1 class='title' style="background-color: #04bfbd;color: #fff;font-weight: bold;"><span id="dy">{{ dyname }}</span>订阅</h1>
+    </header>
+    <div class="content" >
+        <!-- 雨情信息 list -->
+        <table id="detail" class="list-block" style="padding: 0 2rem;width: 100%;text-align: center;margin: 0;">
+            <tr class="item-inner row">
+                <th class="col-50">行政区划</th>
+                <th class="col-50">累计雨量(mm)</th>
+            </tr>
+            <tr v-for="row in rows" class="item-inner row">
+                <td class="col-50">{{ row.place }}</td>
+                <td class="col-50">{{ row.rain }}</td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+<!-- CDN
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://static.ismjt.cn/hswx/vue.min.js' charset='utf-8'></script>-->
+
+<script type='text/javascript' src='./static/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='./static/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='./static/vue.min.js' charset='utf-8'></script>
+
+</body>
+</html>
+
+<script>
+    new Vue({
+        el: '#dy',
+        data: {
+            dyname: getRequest().keyword
+        }
+    });
+    new Vue({
+        el: '#detail',
+        data: {
+            rows: [
+                { place: '南昌' , rain:'20'},
+                { place: '九江' , rain:'40' },
+                { place: '上海' , rain:'23' }
+            ]
+        }
+    });
+    function getRequest() {
+        var url = window.location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                //就是这句的问题
+                theRequest[strs[i].split("=")[0]]=decodeURI(strs[i].split("=")[1]);
+                //之前用了unescape()
+                //才会出现乱码
+            }
+        }
+        return theRequest;
+    }
+</script>

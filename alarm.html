@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>今日预警 | 上饶防旱抗汛系统</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="./static/img/fav.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- 我们提供了CDN地址可以直接使用，并且强烈建议使用我们的CDN而不是下载到本地
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+
+    <!-- local -->
+    <link rel="stylesheet" href="./static/sm.min.css">
+    <script type='text/javascript' src='./static/vue.min.js' charset='utf-8'></script>
+
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <h1 class='title' style="background-color: #04bfbd;color: #fff;font-weight: bold;">上饶市防汛抗旱今日预警</h1>
+    </header>
+    <div class="content">
+        <div id="type1" style=""><time style="margin: 0 6rem;text-align: center;color: #04bfbd;">{{datetime}}</time></div>
+        <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 0.5px solid #ccc;">
+            <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">24小时内雨量超过80毫米的测站</h2>
+
+        </div>
+        <div class="list-block" style="margin: 0 0 1rem 0;">
+            <ul>
+                <li>
+                    <!-- 雨情信息 list -->
+                    <table id="syinfo1" class="list-block" style="padding-left: 0;width: 100%;text-align: center;margin: 0;">
+                        <tr class="item-inner row">
+                            <th class="col-50">列1</th>
+                            <th class="col-50">列2</th>
+                            <th class="col-50">列3</th>
+                        </tr>
+                        <tr v-for="row in rows" class="item-inner row">
+                            <td class="col-50">{{ row.place }}</td>
+                            <td class="col-50">{{ row.rain }}</td>
+                            <td class="col-50">{{ row.rain2 }}</td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 0.5px solid #ccc;">
+            <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">最近24小时内，3小时雨量超过50毫米的测站</h2>
+        </div>
+        <div class="list-block" style="margin: 0 0 1rem 0;">
+            <ul>
+                <li>
+                    <!-- list2 -->
+                    <table id="syinfo2" class="list-block" style="padding-left: 0;width: 100%;text-align: center;margin: 0;">
+                        <tr class="item-inner row">
+                            <th class="col-50">列1</th>
+                            <th class="col-50">列2</th>
+                        </tr>
+                        <tr v-for="row in rows" class="item-inner row">
+                            <td class="col-50">{{ row.place }}</td>
+                            <td class="col-50">{{ row.rain }}</td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
+
+        <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 0.5px solid #ccc;">
+            <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">最近24小时内，1小时雨量超过30毫米的测站</h2>
+        </div>
+        <div class="list-block" style="margin: 0 0 1rem 0;">
+            <ul>
+                <li>
+                    <!--list3 -->
+                    <table id="syinfo3" class="list-block" style="padding-left: 0;width: 100%;text-align: center;margin: 0;">
+                        <tr class="item-inner row">
+                            <th class="col-25">列1</th>
+                            <th class="col-25">列2</th>
+                            <th class="col-25">列3</th>
+                            <th class="col-25">列4</th>
+                        </tr>
+                        <tr v-for="row in rows" class="item-inner row">
+                            <td class="col-50">{{ row.place }}</td>
+                            <td class="col-50">{{ row.rain }}</td>
+                            <td class="col-50">{{ row.place2 }}</td>
+                            <td class="col-50">{{ row.rain2 }}</td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+<!-- CDN
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>-->
+<script type='text/javascript' src='./static/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='./static/sm.min.js' charset='utf-8'></script>
+
+
+</body>
+</html>
+
+<script>
+    new Vue({
+        el: '#syinfo1',
+        data: {
+            rows: [
+                { place: '高新区' , rain:'65' , rain2:'65'},
+                { place: '青山湖' , rain:'40' , rain2:'55'},
+                { place: '上海城' , rain:'23' , rain2:'65'}
+            ]
+        }
+    });
+</script>

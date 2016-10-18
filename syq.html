@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>水雨情 | 上饶防旱抗汛系统</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="./static/img/fav.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="cache-control" content="no-cache">
+
+    <!-- 我们提供了CDN地址可以直接使用，并且强烈建议使用我们的CDN而不是下载到本地
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+
+    <link rel="stylesheet" href="./static/sm.min.css">
+    <script type='text/javascript' src='./static/vue.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='./static/laypage.min.js' charset='utf-8'></script>
+    <style>
+        th,td{margin: 0 auto;}
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="bar bar-nav">
+        <h1 class='title' style="background-color: #04bfbd;color: #fff;font-weight: bold;">上饶市防汛抗旱汛情综述</h1>
+    </header>
+    <div class="content">
+        <div class="buttons-tab">
+            <a href="#xqzs_tab" class="tab-link active button">汛情综述</a>
+            <a href="#syq_tab" class="tab-link button">水雨情</a>
+        </div>
+        <div class="tabs">
+            <!-- 汛情综述 -->
+            <div id="xqzs_tab" class="tab active">
+                <div id="rainbarnav" class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 1px solid #0a8ddf;">
+                    <!--<button class="button button-link button-nav pull-right" onclick="window.location.href='./subscribe.html?keyword=雨情信息'" style="margin-right: 0.5rem;width:3.2rem;height: 1.2rem;font-size:.6rem;z-index: 1;color: #fff;border: 0;margin-top: 0.5rem;background-color: #f96;">-->
+                    <button class="button button-link button-nav pull-right" onclick="showDyList('sy','syPage',syvue.rows)" style="margin-right: 0.5rem;width:3.2rem;height: 1.2rem;font-size:.6rem;z-index: 1;color: #fff;border: 0;margin-top: 0.5rem;background-color: #f96;">
+                        已订阅<span class="icon" style="height: inherit;"><img style="width: .6rem;height: .6rem;margin-left: 2px;" src="./static/img/icon-dy.png" /></span>
+                    </button>
+                    <h2 id="rainh2" class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;" onclick="syqPage(rainAsync.tm1,'syPage',syvue.rows);document.getElementById('syTm').value='tm1';document.getElementById('rainbarnav').style.borderBottom = '1px solid #0a8ddf'">
+                        <select onchange="syTmChange()" id="syTm" style="vertical-align: text-top;height: .9rem;font-size: .5rem;" name="tm" class="item-input">
+                            <option value="tm1">1小时</option>
+                            <option value="tm3">3小时</option>
+                            <option value="tm24">24小时</option>
+                        </select>
+                        雨情信息</h2>
+                </div>
+                <div class="list-block" style="margin: 0 0 1rem 0;">
+                    <ul>
+                        <!--<li style="font-size: .6rem;padding: 0 auto;text-align: center;padding-top: .2rem;">
+                            <span>从</span>
+                            <input style="text-align: center;box-shadow: 0 0 3px #dedede;border-radius: 3px;width: 5.2rem;border: 1px #c5bfbf solid;height: 1rem;font-size: .6rem;display: inline-flex;" type="text" id='datetime-picker-start'/>
+                            <span>至</span>
+                            <input style="text-align: center;box-shadow: 0 0 3px #dedede;border-radius: 3px;width: 5.2rem;border: 1px #c5bfbf solid;height: 1rem;font-size: .6rem;display: inline-flex;" type="text" id='datetime-picker-end'/>
+                            <span>时段降雨：</span>
+                        </li>-->
+                        <li>
+                            <!-- 雨情信息 list -->
+                            <table id="syinfo" class="list-block" style="padding-left: 0;width: 100%;text-align: center;margin: 0;">
+                                <tr class="item-inner row">
+                                    <th class="col-40">行政区划</th>
+                                    <th class="col-30">告警雨量<br>(mm)</th>
+                                    <th class="col-30">订阅</th>
+                                </tr>
+                                <tr v-for="row in rows" class="item-inner row">
+                                    <td class="col-40">{{ row.cnvt }}</td>
+                                    <td class="col-30">{{ row.maxpp }}</td>
+                                    <td class="col-30"><input onclick="dealSyDy(this)" type="checkbox" id="{{row.inputId}}" /> </td>
+                                </tr>
+                                <tr id="syPage"></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="skbarnav" class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 1px solid #0a8ddf;">
+                    <button class="button button-link button-nav pull-right" onclick="showDyList('水库水情','skPage',skvue.rows)" style="margin-right: 0.5rem;width:3.2rem;height: 1.2rem;font-size:.6rem;z-index: 1;color: #fff;border: 0;margin-top: 0.5rem;background-color: #f96;">
+                        已订阅<span class="icon" style="height: inherit;"><img style="width: .6rem;height: .6rem;margin-left: 2px;" src="./static/img/icon-dy.png" /></span>
+                    </button>
+                    <h2 id="skh2" class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;" onclick="syqPage(rsvrAsync.rsvrdata,'skPage',skvue.rows);document.getElementById('skbarnav').style.borderBottom = '1px solid #0a8ddf'">水库水情</h2>
+                </div>
+                <div class="list-block" style="margin: 0 0 1rem 0;">
+                    <ul>
+                        <li>
+                            <!-- 水库水情 list -->
+                            <table id="skinfo" class="list-block" style="margin: 0;padding-left: 0;width: 100%;text-align: center;">
+                                <tr class="item-inner row">
+                                    <th class="col-40">水库名称</th>
+                                    <th class="col-30">超汛线(米)</th>
+                                    <th class="col-30">订阅</th>
+                                </tr>
+                                <tr v-for="row in rows" class="item-inner row">
+                                    <td class="col-40">{{ row.name }}</td>
+                                    <td class="col-30">{{ row.cmpfsltdz }}</td>
+                                    <td class="col-30"><input onclick="dealDy(this)" type="checkbox" /> </td>
+                                </tr>
+                                <tr id="skPage"></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 1px solid #0a8ddf;">
+                    <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">河道水情</h2>
+                </div>
+                <div class="list-block" style="margin: 0 0 1rem 0;">
+                    <ul>
+                        <li style="padding: .2rem;">
+                            <!--<span row="3" id="hdinfo">从服务器端接收数据并显示从服务器端接收数据并显示从服务器端接收数据并显示从服务器端接收数据并显示从服务器端接收数据并显示</span>-->
+                            <!-- 河道水情 文字描述 -->
+                            <table class="list-block" style="margin: 0;padding-left: 0;width: 100%;text-align: center;">
+                                <tr id="hdDescr" class="item-inner row">
+
+                                </tr>
+                            </table>
+                            <!-- 河道水情 list -->
+                            <table id="hdinfo" class="list-block" style="margin: 0;padding-left: 0;width: 100%;text-align: center;">
+                                <tr class="item-inner row">
+                                    <th class="col-30">站名</th>
+                                    <th class="col-30">河名</th>
+                                    <th class="col-20">水位(m)</th>
+                                    <th class="col-20">订阅</th>
+                                </tr>
+                                <tr v-for="row in rows" class="item-inner row">
+                                    <td class="col-30">{{ row.name }}</td>
+                                    <td class="col-30">{{ row.bsnm }}</td>
+                                    <td class="col-20">{{ row.z }}</td>
+                                    <td class="col-20"><input type="checkbox" id="" /> </td>
+                                </tr>
+                                <tr id="hdPage"></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 水雨情 -->
+            <div id="syq_tab" class="tab">
+                <!-- 雨情 -->
+                <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 1px solid #ccc;">
+                    <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">雨情信息</h2>
+                </div>
+                <div class="list-block" style="margin: 0 0 1rem 0;">
+                    <ul>
+                        <li style="padding: .2rem;">
+                            <!-- 雨情 list -->
+                            <table id="yuqing" class="list-block" style="margin: 0;padding-left: 0;width: 100%;text-align: center;">
+                                <tr class='item-inner row'><th class='col-25'>测站名称</th><th class='col-25'>行政区划</th><th class='col-25'>累计雨量(mm)</th> <th class='col-25'>添加订阅</th> </tr>
+                                <tr v-for='row in rows' class='item-inner row'><td class='col-25'>{{ row.name }}</td><td class='col-25'>{{ row.nm }}</td> <td class='col-25'>{{ row.tdavg }}</td> <td class='col-25'><input type='checkbox' /></td></tr>
+                                <tr id="yuqingPage"></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 水库 -->
+                <div class="bar-nav content-block-title" style="margin: 0.5rem 0 0 0;height: 2rem;border-bottom: 1px solid #ccc;">
+                    <h2 class="title pull-left" style="background-color: #fff;color: #0a8ddf;margin: 0;">水库信息</h2>
+                </div>
+                <div class="list-block" style="margin: 0 0 1rem 0;">
+                    <ul>
+                        <li style="padding: .2rem;">
+                            <!-- 水库 list -->
+                            <table id="shuiku" class="list-block" style="margin: 0;padding-left: 0;width: 100%;text-align: center;">
+                                <tr class="item-inner row">
+                                    <th class="col-25">测站名称</th>
+                                    <th class="col-20">超汛线(米)</th>
+                                    <th class="col-20">主汛</th>
+                                    <th class="col-20">后汛</th>
+                                    <th class="col-15">订阅</th>
+                                </tr>
+                                <tr v-for="row in rows" class="item-inner row">
+                                    <td class="col-25">{{ row.name }}</td>
+                                    <td class="col-20">{{ row.line }}</td>
+                                    <td class="col-20">{{ row.hhrz }}</td>
+                                    <td class="col-20">{{ row.fsltdz }}</td>
+                                    <td class="col-15"><input type="checkbox" /></td>
+                                </tr>
+                                <tr id="shuikuPage"></tr>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 地图 -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CDN
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>-->
+<script type='text/javascript' src='./static/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='./static/sm.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="./static/syq2.js" charset="utf-8"></script>
+</body>
+</html>
